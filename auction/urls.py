@@ -1,5 +1,8 @@
 from django.urls import path
-from django.conf import settings
+from . import views
 
 urlpatterns = [
+    path('', views.index, name='index'),
+    path('room/<int:pk>/', views.room, name='room'),
+
 ]

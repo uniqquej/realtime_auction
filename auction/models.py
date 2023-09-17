@@ -14,19 +14,26 @@ auction_chat_close_at : 경매 마감 시간(user가 경매를 종료 했을 경
 
 class Auction(models.Model):
     auction_users = models.ForeignKey(User, on_delete=models.CASCADE)
-    auction_chat_name = models.OneToOneField(Products, on_delete=models.CASCADE)
-    auction_chat_open_at = models.DateTimeField(blank=False)
-    auction_chat_close_at = models.DateTimeField(blank=True, null=True)
-
+    name = models.CharField(max_length=255, null=False, blank=False, unique=True)
+    # auction_chat_name = models.OneToOneField(Products, on_delete=models.CASCADE)
+    # auction_chat_open_at = models.DateTimeField(blank=False)
+    # auction_chat_close_at = models.DateTimeField(blank=True, null=True)
+    current_users = models.ManyToManyField(User,related_name="action_room" )
     def __str__(self):
         return self.auction_chat_name
 
-    def close_auction(self):
-        """
-        판매자가 경매를 마감한 시간을 경매 마감시간으로 설정합니다.
-        """
-        self.auction_chat_close_at = timezone.now()
-        self.save()
+    # def close_auction(self):
+    #     """
+    #     판매자가 경매를 마감한 시간을 경매 마감시간으로 설정합니다.
+    #     """
+    #     self.auction_chat_close_at = timezone.now()
+    #     self.save()
 
-    class Meta:
-        ordering = ["-auction_chat_open_at"]
+    # class Meta:
+    #     ordering = ["-auction_chat_open_at"]
+
+class Chatter(models.Model):
+    auction = models.ForeignKey(Auction,on_delete=models.CASCADE, related_name='chat')
+    offer_prcie = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
