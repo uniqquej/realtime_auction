@@ -1,18 +1,9 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, reverse
-
-from .models import Auction
+from django.shortcuts import render
 
 def index(request):
-    if request.method == "POST":
-        name = request.POST.get("name", None)
-        if name:
-            auction = Auction.objects.create(name=name, auction_users=request.user)
-            HttpResponseRedirect(reverse("auction", args=[auction.pk]))
-    return render(request, 'index.html')
+    return render(request, 'index.html', {})
 
-def room(request, pk):
-    auction: Auction = get_object_or_404(Auction, pk=pk)
+def room(request, room_name):
     return render(request, 'room.html', {
-        "auction":auction,
+        'room_name': room_name
     })
